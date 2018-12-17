@@ -1,0 +1,36 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apiserver
+  namespace: jer-test
+spec:
+  template:
+    metadata:
+      labels:
+        app: "apiserver"
+    spec:
+      containers:
+      - name: apiserver
+        command: ["/apiserver"]
+        args: ["--port","80"]
+        image: docker.io/pcodk/masterclass-api
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 30m
+        env:
+        - name: PCO_ENV
+          value: prod
+        ports:
+        - containerPort: 80
+          name: "apiserver"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: api
+
+

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api
+  namespace: jer-test
+data:
+  prod.yml: |-
+
+    app:
+      secret: Chohs4ca
