@@ -1,0 +1,19 @@
+---
+
+apiVersion: "extensions/v1beta1"
+kind: Ingress
+metadata:
+  name: phpapp
+  namespace: "jer-test"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "2m"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  rules:
+  - host: web.jer.masterclass.peytz.dk
+    http:
+      paths:
+      - backend:
+          serviceName: phpapp
+          servicePort: web
+        path: /

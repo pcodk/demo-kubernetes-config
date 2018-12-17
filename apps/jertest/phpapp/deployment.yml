@@ -1,0 +1,55 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "phpapp"
+  namespace: "jer-test"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "phpapp"
+    spec:
+      initContainers:
+      - name: "install"
+        image: "docker.io/pcodk/masterclass-php:latest"
+        imagePullPolicy: Always
+#        command: ["sh", "/var/www/docroot/docker/Web/init_k8s.sh"]
+        command: ["cp", "-a",".", "/application"]
+        volumeMounts:
+        - mountPath: /application
+          name: workdir
+
+      containers:
+      - name: nginx
+        image: pcodk/nginx
+        ports:
+        - containerPort: 80
+          name: "web"
+        volumeMounts:
+         - mountPath: /var/www/docroot
+           name: workdir
+        env:
+        - name: NGINX_TRY_FILES
+          value: /index.php$is_args$args
+        - name: NGINX_WEBROOT
+          value: /var/www/docroot/public
+      - name: php
+        image: pcodk/poc-php:7.2-fpm
+        imagePullPolicy: Always
+        env:
+        - name: APP_ENV
+          value: "prod"
+        - name: SYMFONY_ENV
+          value: "prod"
+
+        volumeMounts:
+         - mountPath: /var/www/docroot
+           name: workdir
+
+      volumes:
+       - name: workdir
+         emptyDir: {}
+
