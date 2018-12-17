@@ -16,7 +16,6 @@ spec:
       - name: "install"
         image: "docker.io/pcodk/masterclass-php:latest"
         imagePullPolicy: Always
-#        command: ["sh", "/var/www/docroot/docker/Web/init_k8s.sh"]
         command: ["cp", "-a",".", "/application"]
         volumeMounts:
         - mountPath: /application
