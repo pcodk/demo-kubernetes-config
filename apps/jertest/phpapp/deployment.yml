@@ -47,8 +47,14 @@ spec:
         volumeMounts:
          - mountPath: /var/www/docroot
            name: workdir
+#         - mountPath: /var/www/persistens
+#           name: datadir
 
       volumes:
        - name: workdir
          emptyDir: {}
+#       - name: datadir
+#         persistentVolumeClaim:
+#           claimName: "test-claim"
+
 
