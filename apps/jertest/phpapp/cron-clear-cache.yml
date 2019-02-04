@@ -1,0 +1,29 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: clear-cache
+  namespace: "jer-test"
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: "clear-cache"
+        spec:
+          imagePullSecrets:
+          - name: dockerhub-jer
+
+          containers:
+          - name: php
+            image: "docker.io/pcodk/masterclass-php:latest"
+            command: ["php", "bin/console", "cache:clear"]
+            env:
+            - name: APP_ENV
+              value: "prod"
+            - name: SYMFONY_ENV
+              value: "prod"
+          restartPolicy: OnFailure
